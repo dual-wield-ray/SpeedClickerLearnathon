@@ -22,6 +22,8 @@ public class ColorChooser : MonoBehaviour
 
     public TMP_Text teamAText;
     public TMP_Text teamBText;
+
+    private bool IsAnimating = false;
     
 
     private void OnEnable()
@@ -47,6 +49,9 @@ public class ColorChooser : MonoBehaviour
 
     public void TeamAMessageReceived(string msg)
     {
+        if (IsAnimating)
+            return;
+        
         if (msg == chosenColor)
         {
             Debug.Log("Team A wins!");
@@ -57,6 +62,9 @@ public class ColorChooser : MonoBehaviour
 
     public void TeamBMessageReceived(string msg)
     {
+        if (IsAnimating)
+            return;
+        
         if (msg == chosenColor)
         {
             Debug.Log("Team B wins!");
@@ -75,12 +83,14 @@ public class ColorChooser : MonoBehaviour
     [ContextMenu("Start animate color")]
     public void StartAnimateRandomColor()
     {
+        IsAnimating = true;
         animationCoroutine = StartCoroutine(AnimateColor());
     }
 
     [ContextMenu("Stop animate color")]
     public void StopAnimateColor()
     {
+        IsAnimating = false;
         if (animationCoroutine != null)
         {
             StopCoroutine(animationCoroutine);
